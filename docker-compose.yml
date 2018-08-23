@@ -8,4 +8,4 @@ services:
         volumes:
             - .docker/nginx.conf:/etc/nginx/conf.d/default.conf
         ports:
-            - ${HOST_PORT}:80
+            - ${PUBLIC_PORT}:80

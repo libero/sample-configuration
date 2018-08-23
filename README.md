@@ -8,4 +8,4 @@ cp .env.dist .env
 docker-compose up
 ```
 
-Customize `.env` to override default options.
+Customize `.env` to override default options such as `PUBLIC_PORT`.
