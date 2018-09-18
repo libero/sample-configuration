@@ -8,4 +8,7 @@ cp .env.dist .env
 docker-compose up
 ```
 
-Customize `.env` to override default options such as `PUBLIC_PORT`.
+Customize `.env` to:
+
+- specify `REVISION_*` environment variables indicating the Docker image tags to use.
+- override default options such as `PUBLIC_PORT`.
