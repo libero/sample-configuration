@@ -3,6 +3,8 @@ version: '3'
 services:
     browser_fpm:
         image: ${DOCKER_NAMESPACE}/browser:${REVISION_BROWSER}
+    dummy-api_fpm:
+        image: ${DOCKER_NAMESPACE}/dummy-api:${REVISION_DUMMY_API}
     web:
         image: nginx:1.15.2-alpine
         volumes:
