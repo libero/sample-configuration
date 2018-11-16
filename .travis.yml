@@ -12,7 +12,7 @@ before_script:
     - docker-compose up -d
 
 script:
-    - .travis/smoke
+    - .travis/smoke-test.sh
 
 if: |
     branch = master OR \
