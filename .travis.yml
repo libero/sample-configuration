@@ -5,10 +5,13 @@ language: minimal
 services: docker
 
 install:
+    - travis_retry docker-compose pull
+
+before_script:
     - docker-compose up -d
 
 script:
-    - [[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' http://localhost:8080/ping 2>&1)" == "pong" ]]
+    - .travis/smoke
 
 if: |
     branch = master OR \
