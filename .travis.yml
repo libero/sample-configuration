@@ -5,8 +5,8 @@ language: minimal
 services: docker
 
 install:
-    - travis_retry docker-compose pull
     - ln -s .env.dist .env
+    - travis_retry docker-compose pull
 
 before_script:
     - docker-compose up -d
