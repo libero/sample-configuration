@@ -6,3 +6,4 @@ echo "Smoke testing dummy-api"
 
 echo "Smoke testing browser"
 [[ "$(curl -sS -H 'Host: unstable.libero.pub' http://localhost:8080/articles/42 2>&1)" == "42" ]]
+[[ "$(curl -sS --header 'Host: unstable.libero.pub' http://localhost:8080/favicon.ico --output /dev/null --write-out '%{http_code}')" == "200" ]]
