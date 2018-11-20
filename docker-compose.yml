@@ -1,5 +1,6 @@
 # necessary for volumes_from, single-host oriented
-version: '2.4'
+# can't upgrade because of Travis CI docker-compose old version
+version: '2.2'
 
 services:
     browser_fpm:
