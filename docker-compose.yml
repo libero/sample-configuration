@@ -1,5 +1,5 @@
 # necessary for volumes_from, single-host oriented
-version: '2'
+version: '2.4'
 
 services:
     browser_fpm:
