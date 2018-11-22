@@ -9,5 +9,5 @@ echo "Smoke testing dummy-api"
 
 .scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_browser_fpm_1"
 echo "Smoke testing browser"
-[[ "$(curl -sS -H 'Host: unstable.libero.pub' http://localhost:8080/articles/42 2>&1)" == "42" ]]
+#[[ "$(curl -sS -H 'Host: unstable.libero.pub' http://localhost:8080/articles/42 2>&1)" == "42" ]]
 [[ "$(curl -sS --header 'Host: unstable.libero.pub' http://localhost:8080/favicon.ico --output /dev/null --write-out '%{http_code}')" == "200" ]]
