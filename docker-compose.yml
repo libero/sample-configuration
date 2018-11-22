@@ -1,13 +1,26 @@
 version: '3'
 
 services:
-    browser_fpm:
-        image: ${DOCKER_NAMESPACE}/browser:${REVISION_BROWSER}
     dummy-api_fpm:
         image: ${DOCKER_NAMESPACE}/dummy-api:${REVISION_DUMMY_API}
+        volumes:
+            - public-api:/app/public
+    browser_fpm:
+        image: ${DOCKER_NAMESPACE}/browser:${REVISION_BROWSER}
+        volumes:
+            - public-browser:/app/public
     web:
         image: nginx:1.15.2-alpine
         volumes:
             - .docker/public-nginx.conf:/etc/nginx/conf.d/default.conf
+            - public-api:/app/api/public
+            - public-browser:/app/browser/public
         ports:
             - ${PUBLIC_PORT}:80
+        depends_on:
+            - browser_fpm
+            - dummy-api_fpm
+
+volumes:
+    public-api:
+    public-browser:
