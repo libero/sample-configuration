@@ -2,6 +2,10 @@ sudo: required
 
 language: minimal
 
+env:
+    global:
+        - COMPOSE_PROJECT_NAME: sampleconfiguration
+
 services: docker
 
 install:
