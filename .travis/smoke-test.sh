@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-sampleconfiguration}"
+COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-sample-configuration}"
 HTTP_PORT="${HTTP_PORT:-8080}"
 
 echo "Wait for containers health"
