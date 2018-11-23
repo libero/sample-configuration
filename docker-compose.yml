@@ -12,6 +12,9 @@ services:
         volumes:
             - ./.docker/browser/content_page.yaml:/app/config/packages/content_page.yaml
             - public-browser:/app/public
+        environment:
+            API_URI: http://web:1080
+            APP_SECRET:
     web:
         image: nginx:1.15.2-alpine
         volumes:
