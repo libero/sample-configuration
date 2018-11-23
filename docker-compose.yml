@@ -10,6 +10,7 @@ services:
     browser_fpm:
         image: ${DOCKER_NAMESPACE}/browser:${REVISION_BROWSER}
         volumes:
+            - ./.docker/browser/content_page.yaml:/app/config/packages/content_page.yaml
             - public-browser:/app/public
     web:
         image: nginx:1.15.2-alpine
