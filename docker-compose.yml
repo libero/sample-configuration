@@ -4,6 +4,8 @@ services:
     dummy-api_fpm:
         image: ${DOCKER_NAMESPACE}/dummy-api:${REVISION_DUMMY_API}
         volumes:
+            - ./.docker/api/content_api.yaml:/app/config/packages/content_api.yaml
+            - ./.docker/api/data:/app/data/
             - public-api:/app/public
     browser_fpm:
         image: ${DOCKER_NAMESPACE}/browser:${REVISION_BROWSER}
