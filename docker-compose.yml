@@ -4,11 +4,17 @@ services:
     dummy-api_fpm:
         image: ${DOCKER_NAMESPACE}/dummy-api:${REVISION_DUMMY_API}
         volumes:
+            - ./.docker/api/content_api.yaml:/app/config/packages/content_api.yaml
+            - ./.docker/api/data:/app/data/
             - public-api:/app/public
     browser_fpm:
         image: ${DOCKER_NAMESPACE}/browser:${REVISION_BROWSER}
         volumes:
+            - ./.docker/browser/content_page.yaml:/app/config/packages/content_page.yaml
             - public-browser:/app/public
+        environment:
+            API_URI: http://web:1080
+            APP_SECRET:
     web:
         image: nginx:1.15.2-alpine
         volumes:
