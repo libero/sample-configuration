@@ -15,7 +15,7 @@ services:
         environment:
             API_URI: http://web:1080
             APP_SECRET:
-    pattern_library:
+    pattern-library:
         image: ${DOCKER_NAMESPACE}/pattern-library:${REVISION_PATTERN_LIBRARY:-latest}
         healthcheck:
             test: ["CMD", "nc", "-z", "localhost", "80"]
@@ -34,7 +34,7 @@ services:
         depends_on:
             - browser_fpm
             - dummy-api_fpm
-            - pattern_library
+            - pattern-library
 
 volumes:
     public-api:
