@@ -16,7 +16,7 @@ services:
             API_URI: http://web:1080
             APP_SECRET:
     pattern-library:
-        image: ${DOCKER_NAMESPACE}/pattern-library:${REVISION_PATTERN_LIBRARY:-b3729776e04ae9213d7ccc35ee966bd53e031801}
+        image: ${DOCKER_NAMESPACE}/pattern-library:${REVISION_PATTERN_LIBRARY}
     web:
         image: nginx:1.15.2-alpine
         volumes:
