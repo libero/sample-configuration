@@ -25,6 +25,7 @@ services:
             APP_SECRET:
             DEFAULT_LOCALE:
             SERVICE_NAME: scholarly-articles
+            #APP_ENV: dev
     content-store_web:
         image: nginx:1.15.2-alpine
         volumes:
