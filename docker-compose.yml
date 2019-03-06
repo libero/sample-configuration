@@ -45,6 +45,7 @@ services:
             interval: 5s
         depends_on:
             - content-store_fpm
+            - content-store_web
     web:
         image: nginx:1.15.2-alpine
         volumes:
