@@ -21,7 +21,6 @@ services:
         image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
         volumes:
             - ./.docker/content-store/data:/app/data/
-            - ./.docker/content-store/monolog.yaml:/app/config/packages/prod/monolog.yaml
         environment:
             APP_SECRET:
             DEFAULT_LOCALE:
