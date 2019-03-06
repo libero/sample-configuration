@@ -17,6 +17,14 @@ services:
             APP_SECRET:
     pattern-library:
         image: ${DOCKER_NAMESPACE}/pattern-library:${REVISION_PATTERN_LIBRARY}
+    content-store_fpm:
+        image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
+        volumes:
+            - ./.docker/content-store/data:/app/data/
+        environment:
+            APP_SECRET:
+            DEFAULT_LOCALE:
+            SERVICE_NAME: scholarly-articles
     web:
         image: nginx:1.15.2-alpine
         volumes:
