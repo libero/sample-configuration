@@ -41,7 +41,7 @@ services:
         ports:
             - ${PUBLIC_PORT_GATEWAY}:8081
         healthcheck:
-            test: ["CMD", "nc", "-z", "localhost", "8081"]
+            test: ["CMD", "wget", "-O", "/dev/null", "localhost:8081/ping"]
             interval: 5s
         depends_on:
             - scholarly-articles_fpm
