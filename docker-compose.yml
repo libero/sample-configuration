@@ -17,6 +17,23 @@ services:
             APP_SECRET:
     pattern-library:
         image: ${DOCKER_NAMESPACE}/pattern-library:${REVISION_PATTERN_LIBRARY}
+    blog-articles_fpm:
+        image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
+        volumes:
+            - ./.docker/blog-articles/data:/app/data/
+        environment:
+            APP_SECRET:
+            DEFAULT_LOCALE:
+            SERVICE_NAME: blog-articles
+    blog-articles_web:
+        image: nginx:1.15.2-alpine
+        volumes:
+            - .docker/blog-articles/nginx.conf:/etc/nginx/conf.d/default.conf
+        healthcheck:
+            test: ["CMD", "wget", "-O", "/dev/null", "localhost:80/ping"]
+            interval: 5s
+        depends_on:
+            - blog-articles_fpm
     scholarly-articles_fpm:
         image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
         volumes:
