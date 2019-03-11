@@ -24,6 +24,9 @@ echo "Smoke testing api-gateway (scholarly-articles content-store)"
 [[ "$(curl -sS "http://localhost:${HTTP_PORT_GATEWAY}/scholarly-articles/ping" 2>&1)" == "pong" ]]
 [[ "$(curl -sS "http://localhost:${HTTP_PORT_GATEWAY}/scholarly-articles/items" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
+echo "Smoke testing api-gateway (search)"
+[[ "$(curl -sS "http://localhost:${HTTP_PORT_GATEWAY}/search/ping" 2>&1)" == "pong" ]]
+
 echo "Smoke testing dummy-api"
 [[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' "http://localhost:${HTTP_PORT}/ping" 2>&1)" == "pong" ]]
 [[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' "http://localhost:${HTTP_PORT}/blog-articles/ping" 2>&1)" == "pong" ]]
