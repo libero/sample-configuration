@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<item xmlns="http://libero.pub">
+
+    <meta>
+
+        <id>post1</id>
+        <service>blog-articles</service>
+
+    </meta>
+
+    <front xml:lang="en">
+
+        <title>Post 1</title>
+
+    </front>
+
+</item>
