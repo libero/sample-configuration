@@ -13,7 +13,7 @@ services:
             - ./.docker/browser/content_page.yaml:/app/config/packages/content_page.yaml
             - public-browser:/app/public
         environment:
-            API_URI: http://web:8083
+            API_URI: http://api-gateway:8081
             APP_SECRET:
     pattern-library:
         image: ${DOCKER_NAMESPACE}/pattern-library:${REVISION_PATTERN_LIBRARY}
