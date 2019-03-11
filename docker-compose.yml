@@ -61,6 +61,8 @@ services:
             test: ["CMD", "wget", "-O", "/dev/null", "localhost:8081/ping"]
             interval: 5s
         depends_on:
+            - blog-articles_fpm
+            - blog-articles_web
             - scholarly-articles_fpm
             - scholarly-articles_web
     web:
