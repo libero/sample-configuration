@@ -7,6 +7,7 @@ services:
             - ./.docker/api/content_api.yaml:/app/config/packages/content_api.yaml
             - ./.docker/api/data:/app/data/
             - public-api:/app/public
+        restart: always
     browser_fpm:
         image: ${DOCKER_NAMESPACE}/browser:${REVISION_BROWSER}
         volumes:
@@ -15,8 +16,10 @@ services:
         environment:
             API_URI: http://api-gateway:8081
             APP_SECRET:
+        restart: always
     pattern-library:
         image: ${DOCKER_NAMESPACE}/pattern-library:${REVISION_PATTERN_LIBRARY}
+        restart: always
     blog-articles_fpm:
         image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
         volumes:
@@ -25,6 +28,7 @@ services:
             APP_SECRET:
             DEFAULT_LOCALE:
             SERVICE_NAME: blog-articles
+        restart: always
     blog-articles_web:
         image: nginx:1.15.2-alpine
         volumes:
@@ -32,6 +36,7 @@ services:
         healthcheck:
             test: ["CMD", "wget", "-O", "/dev/null", "localhost:80/ping"]
             interval: 5s
+        restart: always
         depends_on:
             - blog-articles_fpm
     scholarly-articles_fpm:
@@ -42,6 +47,7 @@ services:
             APP_SECRET:
             DEFAULT_LOCALE:
             SERVICE_NAME: scholarly-articles
+        restart: always
     scholarly-articles_web:
         image: nginx:1.15.2-alpine
         volumes:
@@ -49,6 +55,7 @@ services:
         healthcheck:
             test: ["CMD", "wget", "-O", "/dev/null", "localhost:80/ping"]
             interval: 5s
+        restart: always
         depends_on:
             - scholarly-articles_fpm
     search_wsgi:
@@ -56,6 +63,7 @@ services:
         command: uwsgi --ini=uwsgi.ini
         volumes:
             - .docker/search/uwsgi.ini:/srv/app/uwsgi.ini
+        restart: always
     search_web:
         image: nginx:1.15.5-alpine
         volumes:
@@ -63,6 +71,7 @@ services:
         healthcheck:
             test: ["CMD", "wget", "-O", "/dev/null", "localhost:80/ping"]
             interval: 5s
+        restart: always
         depends_on:
             - search_wsgi
     api-gateway:
@@ -74,6 +83,7 @@ services:
         healthcheck:
             test: ["CMD", "wget", "-O", "/dev/null", "localhost:8081/ping"]
             interval: 5s
+        restart: always
         depends_on:
             - blog-articles_fpm
             - blog-articles_web
@@ -94,6 +104,7 @@ services:
         healthcheck:
             test: ["CMD", "nc", "-z", "localhost", "80"]
             interval: 5s
+        restart: always
         depends_on:
             - browser_fpm
             - dummy-api_fpm
