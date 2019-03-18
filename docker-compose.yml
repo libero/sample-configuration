@@ -70,6 +70,7 @@ services:
         command: uwsgi --ini=uwsgi.ini
         volumes:
             - .docker/search/uwsgi.ini:/srv/app/uwsgi.ini
+            - .docker/search/settings.py:/srv/app/search/settings.py
         restart: always
         depends_on:
             - search_elasticsearch
