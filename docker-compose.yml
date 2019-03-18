@@ -71,6 +71,8 @@ services:
         volumes:
             - .docker/search/uwsgi.ini:/srv/app/uwsgi.ini
         restart: always
+        depends_on:
+            - search_elasticsearch
     search_web:
         image: nginx:1.15.5-alpine
         volumes:
