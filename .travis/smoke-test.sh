@@ -6,18 +6,9 @@ HTTP_PORT="${HTTP_PORT:-8080}"
 HTTP_PORT_GATEWAY="${HTTP_PORT_GATEWAY:-8081}"
 
 echo "Wait for containers health"
-.scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_blog-articles_fpm_1"
-.scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_blog-articles_web_1"
-.scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_scholarly-articles_fpm_1"
-.scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_scholarly-articles_web_1"
-.scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_search_elasticsearch_1"
-.scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_search_wsgi_1"
-.scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_search_web_1"
-.scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_api-gateway_1"
-.scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_dummy-api_fpm_1"
-.scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_browser_fpm_1"
-.scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_pattern-library_1"
-.scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_web_1"
+for service in blog-articles_fpm blog-articles_web scholarly-articles_fpm scholarly-articles_web search_elasticsearch search_wsgi search_web api-gateway dummy-api_fpm browser_fpm pattern-library web; do
+    .scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_${service}_1"
+done
 
 echo "Smoke testing api-gateway (blog-articles content-store)"
 [[ "$(curl -sS "http://localhost:${HTTP_PORT_GATEWAY}/blog-articles/ping" 2>&1)" == "pong" ]]
