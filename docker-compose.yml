@@ -58,12 +58,22 @@ services:
         restart: always
         depends_on:
             - scholarly-articles_fpm
+    search_elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+        environment:
+            - discovery.type=single-node
+        healthcheck:
+            test: ["CMD", "wget", "-O", "/dev/null", "localhost:9200/"]
+            interval: 5s
     search_wsgi:
         image: ${DOCKER_NAMESPACE}/search:${REVISION_SEARCH}
         command: uwsgi --ini=uwsgi.ini
         volumes:
             - .docker/search/uwsgi.ini:/srv/app/uwsgi.ini
+            - .docker/search/settings.py:/srv/app/search/settings.py
         restart: always
+        depends_on:
+            - search_elasticsearch
     search_web:
         image: nginx:1.15.5-alpine
         volumes:
