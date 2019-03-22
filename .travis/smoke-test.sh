@@ -6,7 +6,21 @@ HTTP_PORT="${HTTP_PORT:-8080}"
 HTTP_PORT_GATEWAY="${HTTP_PORT_GATEWAY:-8081}"
 
 echo "Wait for containers health"
-for service in blog-articles_fpm blog-articles_web scholarly-articles_fpm scholarly-articles_web search_elasticsearch search_wsgi search_web api-gateway dummy-api_fpm browser_fpm pattern-library web; do
+services=(
+    blog-articles_fpm
+    blog-articles_web
+    scholarly-articles_fpm
+    scholarly-articles_web
+    search_elasticsearch
+    search_wsgi
+    search_web
+    api-gateway
+    dummy-api_fpm
+    browser_fpm
+    pattern-library
+    web
+)
+for service in "${services[@]}"; do
     .scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_${service}_1"
 done
 
