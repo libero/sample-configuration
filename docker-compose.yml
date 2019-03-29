@@ -11,7 +11,8 @@ services:
     browser_fpm:
         image: ${DOCKER_NAMESPACE}/browser:${REVISION_BROWSER}
         volumes:
-            - ./.docker/browser/content_page.yaml:/app/config/packages/content_page.yaml
+            - ./.docker/browser/libero_page.yaml:/app/config/packages/libero_page.yaml
+            - ./.docker/browser/translations/:/app/translations/
             - public-browser:/app/public
         environment:
             API_URI: http://api-gateway:8081
