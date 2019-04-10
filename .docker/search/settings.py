@@ -3,7 +3,7 @@ Search application settings.
 """
 from typing import List
 
-GATEWAY_URL: str = 'http://unstable--api-gateway.libero.pub'
+GATEWAY_URL: str = 'http://api-gateway:8081'
 
 ELASTICSEARCH_HOSTS: List[str] = [
     'http://search_elasticsearch:9200',
