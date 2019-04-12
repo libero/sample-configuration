@@ -21,7 +21,7 @@ services=(
     web
 )
 for service in "${services[@]}"; do
-    .scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_${service}_1"
+    .scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_${service}_1" 60
 done
 
 echo "Smoke testing api-gateway (blog-articles content-store)"
