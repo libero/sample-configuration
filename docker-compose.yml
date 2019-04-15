@@ -64,6 +64,8 @@ services:
         volumes:
             - .docker/file-store/nginx.conf:/etc/nginx/conf.d/default.conf
             - .docker/file-store/root:/usr/share/nginx/html
+        ports:
+            - ${PUBLIC_PORT_FILE_STORE:-8084}:80
         healthcheck:
             test: ["CMD", "wget", "-O", "/dev/null", "localhost:80/ping"]
             interval: 5s
