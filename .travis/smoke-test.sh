@@ -4,6 +4,7 @@ set -ex
 COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-sample-configuration}"
 HTTP_PORT="${HTTP_PORT:-8080}"
 HTTP_PORT_GATEWAY="${HTTP_PORT_GATEWAY:-8081}"
+HTTP_PORT_FILE_STORE="${HTTP_PORT_FILE_STORE:-8084}"
 
 echo "Wait for containers health"
 services=(
@@ -11,6 +12,7 @@ services=(
     blog-articles_web
     scholarly-articles_fpm
     scholarly-articles_web
+    file-store_web
     search_elasticsearch
     search_wsgi
     search_web
@@ -40,6 +42,10 @@ echo "Smoke testing dummy-api"
 [[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' "http://localhost:${HTTP_PORT}/ping" 2>&1)" == "pong" ]]
 [[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' "http://localhost:${HTTP_PORT}/blog-articles/ping" 2>&1)" == "pong" ]]
 [[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' "http://localhost:${HTTP_PORT}/blog-articles/items" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
+
+echo "Smoke testing file-store"
+[[ "$(curl -sS "http://localhost:${HTTP_PORT_FILE_STORE}/ping" 2>&1)" == "pong" ]]
+[[ "$(curl -sS "http://localhost:${HTTP_PORT_FILE_STORE}/elife-10627-fig1-v1.jpg" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
 echo "Smoke testing browser"
 [[ "$(curl -sS -H 'Host: unstable.libero.pub' "http://localhost:${HTTP_PORT}/blog/post1" --output /dev/null --write-out '%{http_code}')" == "200" ]]
