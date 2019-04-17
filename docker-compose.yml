@@ -4,7 +4,7 @@ services:
     # placeholder service
     elife-style-content-adapter:
         image: busybox
-        command: sh -c 'ls -l /run/secrets/elife-style-content-adapter-aws-credentials && sleep 3600'
+        command: sleep 3600
         restart: always
     dummy-api_fpm:
         image: ${DOCKER_NAMESPACE}/dummy-api:${REVISION_DUMMY_API}
