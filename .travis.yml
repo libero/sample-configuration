@@ -10,7 +10,6 @@ services: docker
 
 install:
     - ln -s .env.dist .env
-    - docker-compose --version
     - travis_retry docker-compose pull
 
 before_script:
