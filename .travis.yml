@@ -13,7 +13,7 @@ install:
     - travis_retry docker-compose pull
 
 before_script:
-    - ./initialize-volumes.sh
+    - .docker/initialize-volumes.sh
     - docker-compose up -d
 
 script:
