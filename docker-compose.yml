@@ -28,6 +28,8 @@ services:
         restart: always
     blog-articles_postgres:
         image: postgres:11.2-alpine
+        volumes:
+            - data-blog-articles:/var/lib/postgresql/data
     blog-articles_fpm:
         image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
         command: >
@@ -56,6 +58,8 @@ services:
             - blog-articles_fpm
     scholarly-articles_postgres:
         image: postgres:11.2-alpine
+        volumes:
+            - data-scholarly-articles:/var/lib/postgresql/data
     scholarly-articles_fpm:
         image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
         command: >
@@ -149,5 +153,9 @@ services:
 volumes:
     public-api:
     public-browser:
+    data-blog-articles:
+        external: true
+    data-scholarly-articles:
+        external: true
     data-search:
         external: true
