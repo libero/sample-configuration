@@ -7,8 +7,10 @@ HTTP_PORT_GATEWAY="${HTTP_PORT_GATEWAY:-8081}"
 
 echo "Wait for containers health"
 services=(
+    blog-articles_postgres
     blog-articles_fpm
     blog-articles_web
+    scholarly-articles_postgres
     scholarly-articles_fpm
     scholarly-articles_web
     search_elasticsearch

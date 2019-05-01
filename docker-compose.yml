@@ -30,6 +30,9 @@ services:
         image: postgres:11.2-alpine
         volumes:
             - data-blog-articles:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD", "pg_isready", "--username", "postgres"]
+            interval: 5s
     blog-articles_fpm:
         image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
         command: >
@@ -60,6 +63,9 @@ services:
         image: postgres:11.2-alpine
         volumes:
             - data-scholarly-articles:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD", "pg_isready", "--username", "postgres"]
+            interval: 5s
     scholarly-articles_fpm:
         image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
         command: >
