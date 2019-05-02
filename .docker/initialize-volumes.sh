@@ -1,4 +1,8 @@
 #!/bin/bash
 set -e
 
-docker volume create data-search
+volumes=($(docker run --interactive --rm linkyard/yaml:1.1.0 /bin/bash -c "spruce json | jq --raw-output '.volumes | with_entries(select(.value.external == true )) | keys[]'" < docker-compose.yml))
+
+for volume in "${volumes[@]}"; do
+    docker volume create "${volume}"
+done

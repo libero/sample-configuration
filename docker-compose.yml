@@ -26,15 +26,29 @@ services:
     pattern-library:
         image: ${DOCKER_NAMESPACE}/pattern-library:${REVISION_PATTERN_LIBRARY}
         restart: always
+    blog-articles_postgres:
+        image: postgres:11.2-alpine
+        volumes:
+            - data-blog-articles:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD", "pg_isready", "--username", "postgres"]
+            interval: 5s
     blog-articles_fpm:
         image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
-        volumes:
-            - ./.docker/blog-articles/data:/app/data/
+        command: >
+            sh -c '
+                while ! nc blog-articles_postgres 5432; do sleep 1; done
+                bin/console doctrine:migrations:migrate --no-interaction
+                php-fpm
+            '
         environment:
             APP_SECRET:
             DEFAULT_LOCALE:
             SERVICE_NAME: blog-articles
+            DATABASE_URL: pgsql://postgres:@blog-articles_postgres:5432/postgres
         restart: always
+        depends_on:
+            - blog-articles_postgres
     blog-articles_web:
         image: nginx:1.15.2-alpine
         volumes:
@@ -45,15 +59,29 @@ services:
         restart: always
         depends_on:
             - blog-articles_fpm
+    scholarly-articles_postgres:
+        image: postgres:11.2-alpine
+        volumes:
+            - data-scholarly-articles:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD", "pg_isready", "--username", "postgres"]
+            interval: 5s
     scholarly-articles_fpm:
         image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
-        volumes:
-            - ./.docker/scholarly-articles/data:/app/data/
+        command: >
+            sh -c '
+                while ! nc scholarly-articles_postgres 5432; do sleep 1; done
+                bin/console doctrine:migrations:migrate --no-interaction
+                php-fpm
+            '
         environment:
             APP_SECRET:
             DEFAULT_LOCALE:
             SERVICE_NAME: scholarly-articles
+            DATABASE_URL: pgsql://postgres:@scholarly-articles_postgres:5432/postgres
         restart: always
+        depends_on:
+            - scholarly-articles_postgres
     scholarly-articles_web:
         image: nginx:1.15.2-alpine
         volumes:
@@ -131,5 +159,9 @@ services:
 volumes:
     public-api:
     public-browser:
+    data-blog-articles:
+        external: true
+    data-scholarly-articles:
+        external: true
     data-search:
         external: true
