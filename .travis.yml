@@ -17,6 +17,7 @@ before_script:
     - docker-compose up -d
 
 script:
+    - bash -xc "shellcheck .docker/*.sh"
     - .travis/smoke-test.sh
     - .docker/populate-services.sh
 
