@@ -25,4 +25,4 @@ done
 
 # Populate the search service
 
-curl --verbose --silent --show-error --request POST "http://localhost:${HTTP_PORT_GATEWAY}/search/populate"
+[[ "$(curl --verbose --silent --show-error --request POST "http://localhost:${HTTP_PORT_GATEWAY}/search/populate" --write-out '%{http_code}')" == "200" ]]
