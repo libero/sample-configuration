@@ -16,11 +16,8 @@ for service in "${content_services[@]}"; do
     while IFS='' read -r line; do files+=("$line"); done < <(find ".docker/${service}/data" -name "*.xml" -print | sort)
 
     for file in "${files[@]}"; do
-        filename=$(basename -- "${file}")
-        path=$(dirname -- "${file}")
-
-        id=${path##*/}
-        version=${filename%.*}
+        id=$(basename "$(dirname "${file}")")
+        version=$(basename -- "${file%.*}")
 
         [[ "$(curl --verbose --silent --show-error --request PUT "http://localhost:${HTTP_PORT_GATEWAY}/${service}/items/${id}/versions/${version}" --upload-file "${file}" --write-out '%{http_code}')" == "204" ]]
     done
