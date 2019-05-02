@@ -11,7 +11,9 @@ content_services=(
 )
 for service in "${content_services[@]}"; do
     echo "Populating ${service}"
-    files=($(find ".docker/${service}/data" -name "*.xml" -print | sort))
+
+    files=()
+    while IFS='' read -r line; do files+=("$line"); done < <(find ".docker/${service}/data" -name "*.xml" -print | sort)
 
     for file in "${files[@]}"; do
         filename=$(basename -- "${file}")
@@ -20,10 +22,10 @@ for service in "${content_services[@]}"; do
         id=${path##*/}
         version=${filename%.*}
 
-        [[ "$(curl --verbose --silent --show-error --request PUT http://localhost:${HTTP_PORT_GATEWAY}/${service}/items/${id}/versions/${version} --upload-file ${file} --write-out '%{http_code}')" == "204" ]]
+        [[ "$(curl --verbose --silent --show-error --request PUT "http://localhost:${HTTP_PORT_GATEWAY}/${service}/items/${id}/versions/${version}" --upload-file "${file}" --write-out '%{http_code}')" == "204" ]]
     done
 done
 
 # Populate the search service
 
-curl --verbose --silent --show-error --request POST http://localhost:${HTTP_PORT_GATEWAY}/search/populate
+curl --verbose --silent --show-error --request POST "http://localhost:${HTTP_PORT_GATEWAY}/search/populate"
