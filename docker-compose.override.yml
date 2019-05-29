@@ -40,7 +40,7 @@ services:
             S3_ENDPOINT: http://s3:9000
             S3_BUCKET: *S3BlogArticlesBucket
             S3_PATH_STYLE_ENDPOINT: 'true'
-            ASSETS_PUBLIC_URI: http://localhost:${PUBLIC_PORT_S3}/bucket
+            ASSETS_PUBLIC_URI: http://localhost:${PUBLIC_PORT_S3}/blog-articles
         depends_on:
             - blog-articles_postgres
             - s3-bucket
@@ -52,11 +52,7 @@ services:
             S3_ENDPOINT: http://s3:9000
             S3_BUCKET: *S3ScholarlyArticlesBucket
             S3_PATH_STYLE_ENDPOINT: 'true'
-            ASSETS_PUBLIC_URI: http://localhost:${PUBLIC_PORT_S3}/bucket
+            ASSETS_PUBLIC_URI: http://localhost:${PUBLIC_PORT_S3}/scholarly-articles
         depends_on:
             - scholarly-articles_postgres
             - s3-bucket
-
-volumes:
-    data-s3:
-        external: true

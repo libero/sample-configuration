@@ -167,3 +167,5 @@ volumes:
         external: true
     data-search:
         external: true
+    data-s3:
+        external: true
