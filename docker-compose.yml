@@ -46,6 +46,7 @@ services:
             DEFAULT_LOCALE:
             SERVICE_NAME: blog-articles
             DATABASE_URL: pgsql://postgres:@blog-articles_postgres:5432/postgres
+            ASSETS_ORIGIN_WHITELIST: ^https://iiif\.elifesciences\.org/
         restart: always
         depends_on:
             - blog-articles_postgres
@@ -79,6 +80,7 @@ services:
             DEFAULT_LOCALE:
             SERVICE_NAME: scholarly-articles
             DATABASE_URL: pgsql://postgres:@scholarly-articles_postgres:5432/postgres
+            ASSETS_ORIGIN_WHITELIST: ^https://iiif\.elifesciences\.org/
         restart: always
         depends_on:
             - scholarly-articles_postgres

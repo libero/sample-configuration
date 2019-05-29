@@ -1,0 +1,62 @@
+version: '3.4'
+
+services:
+    s3:
+        image: minio/minio:RELEASE.2019-05-02T19-07-09Z
+        volumes:
+            - data-s3:/app
+        environment:
+            MINIO_ACCESS_KEY: &AWSKey AKIAIOSFODNN7EXAMPLE
+            MINIO_SECRET_KEY: &AWSSecret wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+            MINIO_REGION: &AWSRegion us-east-1
+        command: server /app
+        ports:
+            - ${PUBLIC_PORT_S3}:9000
+    s3-bucket:
+        image: minio/mc:RELEASE.2019-05-01T23-27-44Z
+        environment:
+            AWS_ACCESS_KEY_ID: *AWSKey
+            AWS_SECRET_ACCESS_KEY: *AWSSecret
+            AWS_DEFAULT_REGION: *AWSRegion
+            S3_BLOG_ARTICLES_BUCKET: &S3BlogArticlesBucket blog-articles
+            S3_SCHOLARLY_ARTICLES_BUCKET: &S3ScholarlyArticlesBucket scholarly-articles
+        entrypoint: sh
+        command: >
+            -ce '
+                while ! nc s3 9000; do sleep 1; done
+                mc config host add minio http://s3:9000 $${AWS_ACCESS_KEY_ID} $${AWS_SECRET_ACCESS_KEY}
+                mc mb minio/$${S3_BLOG_ARTICLES_BUCKET} --region $${AWS_DEFAULT_REGION}
+                mc policy download minio/$${S3_BLOG_ARTICLES_BUCKET}
+                mc mb minio/$${S3_SCHOLARLY_ARTICLES_BUCKET} --region $${AWS_DEFAULT_REGION}
+                mc policy download minio/$${S3_SCHOLARLY_ARTICLES_BUCKET}
+            '
+        depends_on:
+            - s3
+    blog-articles_fpm:
+        environment:
+            AWS_ACCESS_KEY_ID: *AWSKey
+            AWS_SECRET_ACCESS_KEY: *AWSSecret
+            AWS_DEFAULT_REGION: *AWSRegion
+            S3_ENDPOINT: http://s3:9000
+            S3_BUCKET: *S3BlogArticlesBucket
+            S3_PATH_STYLE_ENDPOINT: 'true'
+            ASSETS_PUBLIC_URI: http://localhost:${PUBLIC_PORT_S3}/bucket
+        depends_on:
+            - blog-articles_postgres
+            - s3-bucket
+    scholarly-articles_fpm:
+        environment:
+            AWS_ACCESS_KEY_ID: *AWSKey
+            AWS_SECRET_ACCESS_KEY: *AWSSecret
+            AWS_DEFAULT_REGION: *AWSRegion
+            S3_ENDPOINT: http://s3:9000
+            S3_BUCKET: *S3ScholarlyArticlesBucket
+            S3_PATH_STYLE_ENDPOINT: 'true'
+            ASSETS_PUBLIC_URI: http://localhost:${PUBLIC_PORT_S3}/bucket
+        depends_on:
+            - scholarly-articles_postgres
+            - s3-bucket
+
+volumes:
+    data-s3:
+        external: true
