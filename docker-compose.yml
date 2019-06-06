@@ -102,7 +102,7 @@ services:
             discovery.type: single-node
             ES_JAVA_OPTS: -Xmx256m -Xms256m
         healthcheck:
-            test: ["CMD", "wget", "-O", "/dev/null", "localhost:9200/"]
+            test: ["CMD", "wget", "-O", "/dev/null", "--tries", "1", "localhost:9200/"]
             interval: 5s
     search_wsgi:
         image: ${DOCKER_NAMESPACE}/search:${REVISION_SEARCH}
