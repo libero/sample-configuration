@@ -100,6 +100,7 @@ services:
             - data-search:/usr/share/elasticsearch/data
         environment:
             - discovery.type=single-node
+            - ES_JAVA_OPTS="-Xmx256m -Xms256m"
         healthcheck:
             test: ["CMD", "wget", "-O", "/dev/null", "localhost:9200/"]
             interval: 5s
