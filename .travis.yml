@@ -18,8 +18,7 @@ before_script:
 
 script:
     - bash -xc "shellcheck .docker/*.sh"
-    - .travis/smoke-test.sh
-    - .docker/populate-services.sh
+    - .travis/smoke-test.sh && .docker/populate-services.sh
 
 if: |
     branch = master OR \
