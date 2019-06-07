@@ -10,6 +10,20 @@ services:
       healthcheck:
         test: ["CMD", "pg_isready", "--username", "postgres"]
         interval: 5s
+    jats-ingester_webserver:
+      #image: ${DOCKER_NAMESPACE}/jats-ingester:master
+      image: libero/jats-ingester:master
+      command: sh -c "airflow upgradedb && airflow webserver -p 8080"
+      #environment:
+      #  WAIT_HOSTS: db:5432
+      volumes:
+        #- ./config/aws_dev_config:/airflow/.aws/config
+        - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
+      ports:
+          - 8088:8080
+      # healthcheck:
+      depends_on:
+        - jats-ingester_postgres
     # placeholder service
     elife-style-content-adapter:
         image: busybox
