@@ -7,6 +7,7 @@ HTTP_PORT_GATEWAY="${HTTP_PORT_GATEWAY:-8081}"
 
 echo "Wait for containers health"
 services=(
+    jats-ingester_postgres
     blog-articles_postgres
     blog-articles_fpm
     blog-articles_web

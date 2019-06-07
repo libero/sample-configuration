@@ -1,6 +1,15 @@
 version: '3.4'
 
 services:
+    jats-ingester_postgres:
+      image: postgres:11.2
+      environment:
+        POSTGRES_DB: airflow-db
+      volumes:
+        - data-jats-ingester:/var/lib/postgresql/data
+      healthcheck:
+        test: ["CMD", "pg_isready", "--username", "postgres"]
+        interval: 5s
     # placeholder service
     elife-style-content-adapter:
         image: busybox
@@ -161,6 +170,8 @@ services:
 volumes:
     public-api:
     public-browser:
+    data-jats-ingester:
+        external: true
     data-blog-articles:
         external: true
     data-scholarly-articles:
