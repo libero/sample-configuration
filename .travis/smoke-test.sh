@@ -4,6 +4,7 @@ set -ex
 COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-sample-configuration}"
 HTTP_PORT="${HTTP_PORT:-8080}"
 HTTP_PORT_GATEWAY="${HTTP_PORT_GATEWAY:-8081}"
+HTTP_PORT_JATS_INGESTER="${HTTP_PORT_JATS_INGESTER:-8085}"
 
 echo "Wait for containers health"
 services=(
@@ -28,6 +29,9 @@ services=(
 for service in "${services[@]}"; do
     .scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_${service}_1" 240
 done
+
+echo "Smoke testing jats-ingester"
+[[ "$(curl -sS "http://localhost:${HTTP_PORT_JATS_INGESTER}/" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
 echo "Smoke testing api-gateway (blog-articles content-store)"
 [[ "$(curl -sS "http://localhost:${HTTP_PORT_GATEWAY}/blog-articles/ping" 2>&1)" == "pong" ]]
