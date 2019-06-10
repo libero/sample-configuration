@@ -17,7 +17,6 @@ services:
         #environment:
         #  WAIT_HOSTS: db:5432
         volumes:
-            #- ./config/aws_dev_config:/airflow/.aws/config
             - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
         ports:
             - ${PUBLIC_PORT_JATS_INGESTER}:8080
@@ -35,7 +34,6 @@ services:
         #environment:
         #  WAIT_HOSTS: db:5432
         volumes:
-            #- ./config/aws_dev_config:/airflow/.aws/config
             - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
         restart: always
         depends_on:
@@ -46,7 +44,6 @@ services:
         #environment:
         #  WAIT_HOSTS: db:5432
         volumes:
-            #- ./config/aws_dev_config:/airflow/.aws/config
             - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
         healthcheck:
             test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/8793'"]
