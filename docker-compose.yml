@@ -10,6 +10,7 @@ services:
       healthcheck:
         test: ["CMD", "pg_isready", "--username", "postgres"]
         interval: 5s
+      restart: always
     jats-ingester_webserver:
       image: ${DOCKER_NAMESPACE}/jats-ingester:${REVISION_JATS_INGESTER}
       command: sh -c "airflow upgradedb && airflow webserver -p 8080"
@@ -21,6 +22,29 @@ services:
       ports:
           - 8088:8080
       # healthcheck:
+      restart: always
+      depends_on:
+        - jats-ingester_postgres
+    jats-ingester_scheduler:
+      image: ${DOCKER_NAMESPACE}/jats-ingester:${REVISION_JATS_INGESTER}
+      command: sh -c "airflow scheduler"
+      #environment:
+      #  WAIT_HOSTS: db:5432
+      volumes:
+        #- ./config/aws_dev_config:/airflow/.aws/config
+        - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
+      restart: always
+      depends_on:
+        - jats-ingester_postgres
+    jats-ingester_worker:
+      image: ${DOCKER_NAMESPACE}/jats-ingester:${REVISION_JATS_INGESTER}
+      command: sh -c "airflow worker"
+      #environment:
+      #  WAIT_HOSTS: db:5432
+      volumes:
+        #- ./config/aws_dev_config:/airflow/.aws/config
+        - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
+      restart: always
       depends_on:
         - jats-ingester_postgres
     # placeholder service
