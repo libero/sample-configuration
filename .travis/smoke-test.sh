@@ -31,7 +31,7 @@ for service in "${services[@]}"; do
 done
 
 echo "Smoke testing jats-ingester"
-[[ "$(curl -sS "http://localhost:${HTTP_PORT_JATS_INGESTER}/" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
+[[ "$(curl -sS "http://localhost:${HTTP_PORT_JATS_INGESTER}/admin/" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
 echo "Smoke testing api-gateway (blog-articles content-store)"
 [[ "$(curl -sS "http://localhost:${HTTP_PORT_GATEWAY}/blog-articles/ping" 2>&1)" == "pong" ]]
