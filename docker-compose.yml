@@ -20,7 +20,7 @@ services:
             #- ./config/aws_dev_config:/airflow/.aws/config
             - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
         ports:
-            - 8088:8080
+            - ${PUBLIC_PORT_JATS_INGESTER}:8080
         # healthcheck:
         restart: always
         depends_on:
