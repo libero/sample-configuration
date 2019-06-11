@@ -135,8 +135,7 @@ services:
             discovery.type: single-node
             ES_JAVA_OPTS: -Xmx256m -Xms256m
         healthcheck:
-            test: ["CMD", "curl", "localhost:9200/_cluster/health?wait_for_status=green&timout=5s"]
-            interval: 5s
+            test: ["CMD", "curl", "localhost:9200/_cluster/health?wait_for_status=green"]
     search_wsgi:
         image: ${DOCKER_NAMESPACE}/search:${REVISION_SEARCH}
         command: uwsgi --ini=uwsgi.ini
