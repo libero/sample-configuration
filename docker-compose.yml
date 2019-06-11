@@ -16,8 +16,6 @@ services:
         command: sh -c "airflow upgradedb && airflow webserver -p 8080"
         volumes:
             - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
-        ports:
-            - ${PUBLIC_PORT_JATS_INGESTER}:8080
         healthcheck:
             test: ["CMD-SHELL", "python ./scripts/airflow_webserver_healthcheck.py"]
         restart: always
@@ -185,6 +183,7 @@ services:
             - ${PUBLIC_PORT_BROWSER}:80
             - ${PUBLIC_PORT_PATTERN_LIBRARY}:8082
             - ${PUBLIC_PORT_DUMMY_API}:8083
+            - ${PUBLIC_PORT_JATS_INGESTER}:8085
         healthcheck:
             test: ["CMD", "nc", "-z", "localhost", "80"]
             interval: 5s
