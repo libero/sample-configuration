@@ -1,3 +1,6 @@
+# should not be executed in isolation
+# exports a `volumes` variable
+
 filter=".volumes | with_entries(select(.value.external == true )) | keys[]"
 volumes=()
 
