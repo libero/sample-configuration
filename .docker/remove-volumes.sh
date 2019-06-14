@@ -3,7 +3,7 @@ set -e
 
 source .docker/.external-volumes.rc
 
-for volume in "${volumes[@]}"; do
+for volume in "${EXTERNAL_VOLUMES[@]}"; do
     # if the volume is existing, grep matches it in the 1-item list
     if docker volume ls --quiet --filter name="${volume}" | grep "${volume}"; then
         docker volume rm "${volume}"

@@ -3,6 +3,6 @@ set -e
 
 source .docker/.external-volumes.rc
 
-for volume in "${volumes[@]}"; do
+for volume in "${EXTERNAL_VOLUMES[@]}"; do
     docker volume create "${volume}"
 done

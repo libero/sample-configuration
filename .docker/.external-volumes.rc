@@ -1,11 +1,11 @@
 # should not be executed in isolation
-# exports a `volumes` variable
+# exports a `EXTERNAL_VOLUMES` variable
 
 filter=".volumes | with_entries(select(.value.external == true )) | keys[]"
-volumes=()
+EXTERNAL_VOLUMES=()
 
 while IFS='' read -r line; do 
-    volumes+=("$line"); 
+    EXTERNAL_VOLUMES+=("$line"); 
 done < <( \
     docker run \
     --interactive \
@@ -14,4 +14,4 @@ done < <( \
     /bin/bash -c "spruce json | jq --raw-output '${filter}'" < docker-compose.yml \
     )
 
-export volumes
+export EXTERNAL_VOLUMES
