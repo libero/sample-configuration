@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-source .docker/list-volumes.sh
+source .docker/.volumes
 
 for volume in "${volumes[@]}"; do
     docker volume create "${volume}"
