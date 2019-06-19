@@ -1,0 +1,17 @@
+# should not be executed in isolation
+# exports a `EXTERNAL_VOLUMES` variable
+
+filter=".volumes | with_entries(select(.value.external == true )) | keys[]"
+EXTERNAL_VOLUMES=()
+
+while IFS='' read -r line; do 
+    EXTERNAL_VOLUMES+=("$line"); 
+done < <( \
+    docker run \
+    --interactive \
+    --rm \
+    linkyard/yaml:1.1.0 \
+    /bin/bash -c "spruce json | jq --raw-output '${filter}'" < docker-compose.yml \
+    )
+
+export EXTERNAL_VOLUMES

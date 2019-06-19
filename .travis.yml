@@ -17,8 +17,14 @@ before_script:
     - docker-compose up -d
 
 script:
-    - bash -xc "shellcheck .docker/*.sh"
+    - bash -xc "shellcheck -x .docker/*.sh"
     - .travis/smoke-test.sh && .docker/populate-services.sh
+
+deploy:
+    provider: script
+    script: .scripts/travis/downstream.sh environments "Update sample-configuration to $TRAVIS_COMMIT"
+    on:
+        branch: master
 
 if: |
     branch = master OR \
