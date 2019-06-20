@@ -177,10 +177,12 @@ services:
         image: nginx:1.15.2-alpine
         volumes:
             - .docker/public-nginx.conf:/etc/nginx/conf.d/default.conf
+            - ./files/https_certificate.pem:/etc/nginx/https_certificate.pem
             - public-api:/app/api/public
             - public-browser:/app/browser/public
         ports:
             - ${PUBLIC_PORT_BROWSER}:80
+            - 8443:443
             - ${PUBLIC_PORT_PATTERN_LIBRARY}:8082
             - ${PUBLIC_PORT_DUMMY_API}:8083
             - ${PUBLIC_PORT_JATS_INGESTER}:8085
