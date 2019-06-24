@@ -113,7 +113,7 @@ services:
             DEFAULT_LOCALE:
             SERVICE_NAME: scholarly-articles
             DATABASE_URL: pgsql://postgres:@scholarly-articles_postgres:5432/postgres
-            ASSETS_ORIGIN_WHITELIST: ^(https://iiif\.elifesciences\.org/|https://unstable-jats-ingester-expanded\.s3\.amazonaws\.com/)
+            ASSETS_ORIGIN_WHITELIST: ^(https://prod-elife-published\.s3\.amazonaws.com/|https://unstable-jats-ingester-expanded\.s3\.amazonaws\.com/)
         restart: always
         depends_on:
             - scholarly-articles_postgres
