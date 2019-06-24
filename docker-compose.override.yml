@@ -56,3 +56,6 @@ services:
         depends_on:
             - scholarly-articles_postgres
             - s3-bucket
+    web:
+        volumes:
+            - .docker/web/https-dummy.conf:/etc/nginx/traits.d/https.conf
