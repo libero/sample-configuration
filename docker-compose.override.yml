@@ -59,3 +59,4 @@ services:
     web:
         volumes:
             - .docker/web/https-dummy.conf:/etc/nginx/traits.d/https.conf
+            - .docker/web/http-to-https-dummy.conf:/etc/nginx/traits.d/http-to-https.conf
