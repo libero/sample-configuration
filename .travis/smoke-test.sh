@@ -3,8 +3,7 @@ set -ex
 
 COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-sample-configuration}"
 HTTP_PORT="${HTTP_PORT:-8080}"
-HTTP_PORT_GATEWAY="${HTTP_PORT_GATEWAY:-8081}"
-HTTP_PORT_JATS_INGESTER="${HTTP_PORT_JATS_INGESTER:-8085}"
+HTTPS_PORT="${HTTPS_PORT:-8443}"
 
 echo "Wait for containers health"
 services=(
@@ -31,19 +30,19 @@ for service in "${services[@]}"; do
 done
 
 echo "Smoke testing jats-ingester"
-[[ "$(curl -sS "http://localhost:${HTTP_PORT_JATS_INGESTER}/admin/" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
+[[ "$(curl -sS -H "Host: unstable--jats-ingester.libero.pub" "http://localhost:${HTTP_PORT}/admin/" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
 echo "Smoke testing api-gateway (blog-articles content-store)"
-[[ "$(curl -sS "http://localhost:${HTTP_PORT_GATEWAY}/blog-articles/ping" 2>&1)" == "pong" ]]
-[[ "$(curl -sS "http://localhost:${HTTP_PORT_GATEWAY}/blog-articles/items" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
+[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/blog-articles/ping" 2>&1)" == "pong" ]]
+[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/blog-articles/items" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
 echo "Smoke testing api-gateway (scholarly-articles content-store)"
-[[ "$(curl -sS "http://localhost:${HTTP_PORT_GATEWAY}/scholarly-articles/ping" 2>&1)" == "pong" ]]
-[[ "$(curl -sS "http://localhost:${HTTP_PORT_GATEWAY}/scholarly-articles/items" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
+[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/scholarly-articles/ping" 2>&1)" == "pong" ]]
+[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/scholarly-articles/items" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
 echo "Smoke testing api-gateway (search)"
-[[ "$(curl -sS "http://localhost:${HTTP_PORT_GATEWAY}/search/ping" 2>&1)" == "pong" ]]
-[[ "$(curl -sS "http://localhost:${HTTP_PORT_GATEWAY}/search" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
+[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/search/ping" 2>&1)" == "pong" ]]
+[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/search" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
 echo "Smoke testing dummy-api"
 [[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' "http://localhost:${HTTP_PORT}/ping" 2>&1)" == "pong" ]]
