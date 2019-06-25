@@ -19,10 +19,30 @@ for service in "${content_services[@]}"; do
         id=$(basename "$(dirname "${file}")")
         version=$(basename -- "${file%.*}")
 
-        [[ "$(curl --verbose --silent --show-error --output /dev/null --request PUT --header "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/${service}/items/${id}/versions/${version}" --upload-file "${file}" --write-out '%{http_code}')" == "204" ]]
+        put_response_code=$(curl \
+            --verbose \
+            --silent \
+            --show-error \
+            --output /dev/null \
+            --request PUT \
+            --header "Host: unstable--api-gateway.libero.pub" \
+            "http://localhost:${HTTP_PORT}/${service}/items/${id}/versions/${version}" \
+            --upload-file "${file}" \
+            --write-out '%{http_code}' \
+        )
+        [[ "${put_response_code}" == "204" ]]
     done
 done
 
 # Populate the search service
-
-[[ "$(curl --verbose --silent --show-error --output /dev/null --request POST --header "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/search/populate" --write-out '%{http_code}')" == "200" ]]
+search_response_code=$(curl \
+    --verbose \
+    --silent \
+    --show-error \
+    --output /dev/null \
+    --request POST \
+    --header "Host: unstable--api-gateway.libero.pub" \
+    "http://localhost:${HTTP_PORT}/search/populate" \
+    --write-out '%{http_code}'
+)
+[[ "${search_response_code}" == "200" ]]
