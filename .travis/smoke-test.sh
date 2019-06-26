@@ -36,7 +36,7 @@ if [ "$https_configured" != "null" ]; then
     jats_ingester="https://unstable--jats-ingester.libero.pub:${PUBLIC_PORT_HTTPS}"
     api_gateway="https://unstable--api-gateway.libero.pub:${PUBLIC_PORT_HTTPS}"
     dummy_api="https://unstable--dummy-api.libero.pub:${PUBLIC_PORT_HTTPS}"
-    browser="https://unstable--browser.libero.pub:${PUBLIC_PORT_HTTPS}"
+    browser="https://unstable.libero.pub:${PUBLIC_PORT_HTTPS}"
     pattern_library="https://unstable--pattern-library.libero.pub:${PUBLIC_PORT_HTTPS}"
 else
     jats_ingester="http://localhost:${PUBLIC_PORT_HTTP}"
