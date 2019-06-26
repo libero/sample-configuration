@@ -2,8 +2,8 @@
 set -ex
 
 COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-sample-configuration}"
-HTTP_PORT="${HTTP_PORT:-8080}"
-HTTPS_PORT="${HTTPS_PORT:-8443}"
+PUBLIC_PORT_HTTP="${PUBLIC_PORT_HTTP:-8080}"
+PUBLIC_PORT_HTTPS="${PUBLIC_PORT_HTTPS:-8443}"
 
 echo "Wait for containers health"
 services=(
@@ -29,29 +29,46 @@ for service in "${services[@]}"; do
     .scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_${service}_1" 240
 done
 
+# HTTPS in real environments
+# HTTP locally
+https_configured="$(docker inspect sample-configuration_web_1 | jq -r '.[0].NetworkSettings.Ports["443/tcp"]')"
+if [ "$https_configured" != "null" ]; then
+    jats_ingester="https://unstable--jats-ingester.libero.pub:${PUBLIC_PORT_HTTPS}"
+    api_gateway="https://unstable--api-gateway.libero.pub:${PUBLIC_PORT_HTTPS}"
+    dummy_api="https://unstable--dummy-api.libero.pub:${PUBLIC_PORT_HTTPS}"
+    browser="https://unstable--browser.libero.pub:${PUBLIC_PORT_HTTPS}"
+    pattern_library="https://unstable--pattern-library.libero.pub:${PUBLIC_PORT_HTTPS}"
+else
+    jats_ingester="http://localhost:${PUBLIC_PORT_HTTP}"
+    api_gateway="http://localhost:${PUBLIC_PORT_HTTP}"
+    dummy_api="http://localhost:${PUBLIC_PORT_HTTP}"
+    browser="http://localhost:${PUBLIC_PORT_HTTP}"
+    pattern_library="http://localhost:${PUBLIC_PORT_HTTP}"
+fi
+
 echo "Smoke testing jats-ingester"
-[[ "$(curl -sS -H "Host: unstable--jats-ingester.libero.pub" "http://localhost:${HTTP_PORT}/admin/" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
+[[ "$(curl -sS -H "Host: unstable--jats-ingester.libero.pub" "${jats_ingester}/admin/" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
 echo "Smoke testing api-gateway (blog-articles content-store)"
-[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/blog-articles/ping" 2>&1)" == "pong" ]]
-[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/blog-articles/items" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
+[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "${api_gateway}/blog-articles/ping" 2>&1)" == "pong" ]]
+[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "${api_gateway}/blog-articles/items" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
 echo "Smoke testing api-gateway (scholarly-articles content-store)"
-[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/scholarly-articles/ping" 2>&1)" == "pong" ]]
-[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/scholarly-articles/items" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
+[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "${api_gateway}/scholarly-articles/ping" 2>&1)" == "pong" ]]
+[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "${api_gateway}/scholarly-articles/items" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
 echo "Smoke testing api-gateway (search)"
-[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/search/ping" 2>&1)" == "pong" ]]
-[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "http://localhost:${HTTP_PORT}/search" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
+[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "${api_gateway}/search/ping" 2>&1)" == "pong" ]]
+[[ "$(curl -sS -H "Host: unstable--api-gateway.libero.pub" "${api_gateway}/search" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
 echo "Smoke testing dummy-api"
-[[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' "http://localhost:${HTTP_PORT}/ping" 2>&1)" == "pong" ]]
-[[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' "http://localhost:${HTTP_PORT}/blog-articles/ping" 2>&1)" == "pong" ]]
-[[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' "http://localhost:${HTTP_PORT}/blog-articles/items" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
+[[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' "${dummy_api}/ping" 2>&1)" == "pong" ]]
+[[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' "${dummy_api}/blog-articles/ping" 2>&1)" == "pong" ]]
+[[ "$(curl -sS -H 'Host: unstable--dummy-api.libero.pub' "${dummy_api}/blog-articles/items" --output /dev/null --write-out '%{http_code}' 2>&1)" == "200" ]]
 
 echo "Smoke testing browser"
-[[ "$(curl -sS -H 'Host: unstable.libero.pub' "http://localhost:${HTTP_PORT}/" --output /dev/null --write-out '%{http_code}')" == "200" ]]
-[[ "$(curl -sS --header 'Host: unstable.libero.pub' "http://localhost:${HTTP_PORT}/favicon.ico" --output /dev/null --write-out '%{http_code}')" == "200" ]]
+[[ "$(curl -sS -H 'Host: unstable.libero.pub' "${browser}" --output /dev/null --write-out '%{http_code}')" == "200" ]]
+[[ "$(curl -sS --header 'Host: unstable.libero.pub' "${browser}/favicon.ico" --output /dev/null --write-out '%{http_code}')" == "200" ]]
 
 echo "Smoke testing pattern library"
-[[ "$(curl -sS --header 'Host: unstable--pattern-library.libero.pub' "http://localhost:${HTTP_PORT}" --output /dev/null --write-out '%{http_code}')" == "200" ]]
+[[ "$(curl -sS --header 'Host: unstable--pattern-library.libero.pub' "${pattern_library}" --output /dev/null --write-out '%{http_code}')" == "200" ]]
