@@ -31,7 +31,7 @@ done
 
 # HTTPS in real environments
 # HTTP locally
-https_configured="$(docker inspect sample-configuration_web_1 | jq -r '.[0].NetworkSettings.Ports["443/tcp"]')"
+https_configured="$(docker inspect "${COMPOSE_PROJECT_NAME}_web_1" | jq -r '.[0].NetworkSettings.Ports["443/tcp"]')"
 if [ "$https_configured" != "null" ]; then
     jats_ingester="https://unstable--jats-ingester.libero.pub:${PUBLIC_PORT_HTTPS}"
     api_gateway="https://unstable--api-gateway.libero.pub:${PUBLIC_PORT_HTTPS}"
