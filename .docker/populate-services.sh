@@ -1,7 +1,18 @@
 #!/bin/bash
 set -e
 
-HTTP_PORT="${HTTP_PORT:-8080}"
+COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-sample-configuration}"
+PUBLIC_PORT_HTTP="${PUBLIC_PORT_HTTP:-8080}"
+PUBLIC_PORT_HTTPS="${PUBLIC_PORT_HTTPS:-8443}"
+
+# HTTPS in real environments
+# HTTP locally
+https_configured="$(docker inspect "${COMPOSE_PROJECT_NAME}_web_1" | jq -r '.[0].NetworkSettings.Ports["443/tcp"]')"
+if [ "$https_configured" != "null" ]; then
+    api_gateway="https://unstable--api-gateway.libero.pub:${PUBLIC_PORT_HTTPS}"
+else
+    api_gateway="http://localhost:${PUBLIC_PORT_HTTP}"
+fi
 
 # Populate the content services
 
@@ -26,7 +37,7 @@ for service in "${content_services[@]}"; do
             --output /dev/null \
             --request PUT \
             --header "Host: unstable--api-gateway.libero.pub" \
-            "http://localhost:${HTTP_PORT}/${service}/items/${id}/versions/${version}" \
+            "${api_gateway}/${service}/items/${id}/versions/${version}" \
             --upload-file "${file}" \
             --write-out '%{http_code}' \
         )
@@ -42,7 +53,7 @@ search_response_code=$(curl \
     --output /dev/null \
     --request POST \
     --header "Host: unstable--api-gateway.libero.pub" \
-    "http://localhost:${HTTP_PORT}/search/populate" \
+    "${api_gateway}/search/populate" \
     --write-out '%{http_code}'
 )
 [[ "${search_response_code}" == "200" ]]
