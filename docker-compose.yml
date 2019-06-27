@@ -16,6 +16,8 @@ services:
         command: sh -c "airflow upgradedb && airflow webserver -p 8080"
         volumes:
             - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
+        environment:
+            ENVIRONMENT_NAME: ${ENVIRONMENT_NAME}
         healthcheck:
             test: ["CMD-SHELL", "python ./scripts/airflow_webserver_healthcheck.py"]
         restart: always
@@ -26,6 +28,8 @@ services:
         command: sh -c "airflow scheduler"
         volumes:
             - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
+        environment:
+            ENVIRONMENT_NAME: ${ENVIRONMENT_NAME}
         restart: always
         depends_on:
             - jats-ingester_postgres
@@ -34,6 +38,8 @@ services:
         command: sh -c "airflow worker"
         volumes:
             - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
+        environment:
+            ENVIRONMENT_NAME: ${ENVIRONMENT_NAME}
         healthcheck:
             test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/8793'"]
         restart: always
@@ -113,7 +119,7 @@ services:
             DEFAULT_LOCALE:
             SERVICE_NAME: scholarly-articles
             DATABASE_URL: pgsql://postgres:@scholarly-articles_postgres:5432/postgres
-            ASSETS_ORIGIN_WHITELIST: ^(https://prod-elife-published\.s3\.amazonaws.com/|https://unstable-jats-ingester-expanded\.s3\.amazonaws\.com/)
+            ASSETS_ORIGIN_WHITELIST: ^(https://prod-elife-published\.s3\.amazonaws.com/|https://${ENVIRONMENT_NAME}-jats-ingester-expanded\.s3\.amazonaws\.com/)
         restart: always
         depends_on:
             - scholarly-articles_postgres
