@@ -61,6 +61,7 @@ services:
         environment:
             API_URI: http://api-gateway:8081
             APP_SECRET:
+            INFO_BAR: libero.page.info_bar
         restart: always
     pattern-library:
         image: ${DOCKER_NAMESPACE}/pattern-library:${REVISION_PATTERN_LIBRARY}
