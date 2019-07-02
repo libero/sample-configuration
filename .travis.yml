@@ -6,7 +6,10 @@ env:
     global:
         - COMPOSE_PROJECT_NAME: sampleconfiguration
 
-services: docker
+addons:
+    apt:
+        packages:
+            - docker-ce
 
 install:
     - ln -s .env.dist .env
