@@ -2,10 +2,6 @@ sudo: required
 
 language: minimal
 
-env:
-    global:
-        - COMPOSE_PROJECT_NAME: sampleconfiguration
-
 addons:
     apt:
         packages:
