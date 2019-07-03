@@ -1,11 +1,8 @@
-sudo: required
-
 language: minimal
 
-addons:
-    apt:
-        packages:
-            - docker-ce
+dist: xenial
+
+services: docker
 
 install:
     - ln -s .env.dist .env
