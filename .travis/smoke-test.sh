@@ -1,7 +1,6 @@
 #!/bin/bash
 set -ex
 
-COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-sample-configuration}"
 ENVIRONMENT_NAME="${ENVIRONMENT_NAME:-unstable}"
 PUBLIC_PORT_HTTP="${PUBLIC_PORT_HTTP:-8080}"
 PUBLIC_PORT_HTTPS="${PUBLIC_PORT_HTTPS:-8443}"
@@ -27,12 +26,12 @@ services=(
     web
 )
 for service in "${services[@]}"; do
-    .scripts/docker/wait-healthy.sh "${COMPOSE_PROJECT_NAME}_${service}_1" 240
+    .scripts/docker/wait-healthy.sh "$(docker-compose ps --quiet "${service}")" 240
 done
 
 # HTTPS in real environments
 # HTTP locally
-https_configured="$(docker inspect "${COMPOSE_PROJECT_NAME}_web_1" | jq -r '.[0].NetworkSettings.Ports["443/tcp"]')"
+https_configured="$(docker inspect "$(docker-compose ps --quiet web)"| jq -r '.[0].NetworkSettings.Ports["443/tcp"]')"
 if [ "$https_configured" != "null" ]; then
     jats_ingester="https://${ENVIRONMENT_NAME}--jats-ingester.libero.pub:${PUBLIC_PORT_HTTPS}"
     api_gateway="https://${ENVIRONMENT_NAME}--api-gateway.libero.pub:${PUBLIC_PORT_HTTPS}"
