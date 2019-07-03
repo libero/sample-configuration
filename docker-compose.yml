@@ -173,11 +173,8 @@ services:
             interval: 5s
         restart: always
         depends_on:
-            - blog-articles_fpm
             - blog-articles_web
-            - scholarly-articles_fpm
             - scholarly-articles_web
-            - search_wsgi
             - search_web
     web:
         image: nginx:1.15.2-alpine
@@ -192,8 +189,10 @@ services:
             interval: 5s
         restart: always
         depends_on:
+            - api-gateway
             - browser_fpm
             - dummy-api_fpm
+            - jats-ingester_webserver
             - pattern-library
 
 volumes:
