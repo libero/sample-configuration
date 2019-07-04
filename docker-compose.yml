@@ -73,6 +73,7 @@ services:
         healthcheck:
             test: ["CMD", "pg_isready", "--username", "postgres"]
             interval: 5s
+        restart: always
     blog-articles_fpm:
         image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
         command: >
@@ -107,6 +108,7 @@ services:
         healthcheck:
             test: ["CMD", "pg_isready", "--username", "postgres"]
             interval: 5s
+        restart: always
     scholarly-articles_fpm:
         image: ${DOCKER_NAMESPACE}/content-store:${REVISION_CONTENT_STORE}
         command: >
