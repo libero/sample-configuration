@@ -61,6 +61,7 @@ services:
         environment:
             API_URI: http://api-gateway:8081
             APP_SECRET:
+            GTM_ID: ${BROWSER_GTM_ID:-}
             INFO_BAR: ${BROWSER_INFO_BAR:-}
         restart: always
     pattern-library:
