@@ -15,7 +15,7 @@ before_script:
 
 script:
     - bash -xc "shellcheck -x .docker/*.sh"
-    - .travis/smoke-test.sh && .docker/populate-services.sh
+    - .travis/smoke-test.sh && POPULATE_CONTENT_STORES=1 .docker/populate-services.sh
 
 deploy:
     provider: script
