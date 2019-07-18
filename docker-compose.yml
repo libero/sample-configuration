@@ -183,6 +183,7 @@ services:
             - .docker/web/default.conf:/etc/nginx/conf.d/default.conf
             - public-api:/app/api/public
             - public-browser:/app/browser/public
+            - .docker/browser/public:/app/browser/public/assets
         ports:
             - ${PUBLIC_PORT_HTTP}:80
         healthcheck:
