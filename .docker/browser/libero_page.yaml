@@ -3,6 +3,8 @@ libero_page:
         homepage:
             path: '/'
             primary_listing: 'search'
+        header_image:
+            src: /assets/homepage.jpg
         content:
             blog-articles:
                 path: '/blog/{id}'
