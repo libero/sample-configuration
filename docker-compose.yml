@@ -1,6 +1,10 @@
 version: '3.4'
 
 services:
+    jats-ingester_broker:
+        image: redis:5.0.5-alpine
+        healthcheck:
+            test: ["CMD", "redis-cli", "PING"]
     jats-ingester_postgres:
         image: postgres:11.2
         environment:
@@ -23,6 +27,7 @@ services:
         restart: always
         depends_on:
             - jats-ingester_postgres
+            - jats-ingester_broker
     jats-ingester_scheduler:
         image: ${DOCKER_NAMESPACE}/jats-ingester:${REVISION_JATS_INGESTER}
         command: sh -c "airflow scheduler"
@@ -33,6 +38,7 @@ services:
         restart: always
         depends_on:
             - jats-ingester_postgres
+            - jats-ingester_broker
     jats-ingester_worker:
         image: ${DOCKER_NAMESPACE}/jats-ingester:${REVISION_JATS_INGESTER}
         command: sh -c "airflow worker"
@@ -45,6 +51,7 @@ services:
         restart: always
         depends_on:
             - jats-ingester_postgres
+            - jats-ingester_broker
     dummy-api_fpm:
         image: ${DOCKER_NAMESPACE}/dummy-api:${REVISION_DUMMY_API}
         volumes:
