@@ -150,6 +150,7 @@ services:
             - data-search:/usr/share/elasticsearch/data
         environment:
             discovery.type: single-node
+            index.blocks.read_only_allow_delete: null
             ES_JAVA_OPTS: -Xmx256m -Xms256m
         healthcheck:
             test: ["CMD", "curl", "localhost:9200/_cluster/health?wait_for_status=yellow"]
