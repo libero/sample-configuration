@@ -147,7 +147,9 @@ services:
     search_elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
         volumes:
+            - .docker/search/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
             - data-search:/usr/share/elasticsearch/data
+            - data-search-logs:/usr/share/elasticsearch/logs
         environment:
             discovery.type: single-node
             index.blocks.read_only_allow_delete: null
@@ -215,6 +217,8 @@ volumes:
     data-scholarly-articles:
         external: true
     data-search:
+        external: true
+    data-search-logs:
         external: true
     data-s3:
         external: true
