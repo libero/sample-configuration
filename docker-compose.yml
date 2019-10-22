@@ -20,6 +20,7 @@ services:
         command: sh -c "airflow upgradedb && airflow webserver -p 8080"
         volumes:
             - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
+            - .docker/jats-ingester/airflow.cfg:/airflow/.aws/config
         environment:
             ENVIRONMENT_NAME: ${ENVIRONMENT_NAME}
         healthcheck:
@@ -33,6 +34,7 @@ services:
         command: sh -c "airflow scheduler"
         volumes:
             - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
+            - .docker/jats-ingester/airflow.cfg:/airflow/.aws/config
         environment:
             ENVIRONMENT_NAME: ${ENVIRONMENT_NAME}
         restart: always
@@ -44,6 +46,7 @@ services:
         command: sh -c "airflow worker"
         volumes:
             - .docker/jats-ingester/airflow.cfg:/airflow/airflow.cfg
+            - .docker/jats-ingester/airflow.cfg:/airflow/.aws/config
         environment:
             ENVIRONMENT_NAME: ${ENVIRONMENT_NAME}
         healthcheck:
